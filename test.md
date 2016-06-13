@@ -18,3 +18,5 @@ Adding comment with Default1 and no github hooks
 unchecking github hooks din'y trigger a build!
 
 adding new
+
+Adding crontab 15 mins
