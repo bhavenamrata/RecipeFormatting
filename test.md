@@ -14,4 +14,10 @@ Adding comment to ask for trigger!
 
 Adding comment to ask for trigger with crontab 1 hr!  
 
-Adding comment with Default1 and no github hooks
+Adding comment with Default1 and no github hooks  
+unchecking github hooks din'y trigger a build!  
+
+crontab to 1 min
+
+
+
