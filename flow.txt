@@ -1,0 +1,16 @@
+cryptogen generate --config=./crypto-config.yaml
+
+configtxgen -profile TwoOrgsOrdererGenesis -outputBlock ./channel-artifacts/genesis.block
+
+docker-compose -f docker-compose-e2e-template.yaml up -d
+
+configtxgen -profile TwoOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID $CHANNEL_NAME
+
+Developed Chaincode:
+https://github.com/bhavenamrata/RecipeFormatting/blob/Assignment_hyperledger/medinsurance.go
+
+Next used SDK to 
+A. create, join channel
+B. install , instantiate chaincode
+C. Invoke and Query ledger data.
+
