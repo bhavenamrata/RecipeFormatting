@@ -2,7 +2,7 @@
 
 The instructions provided below specify the steps to build Tensorflow version 2.0.0 on Linux on IBM Z for
 
-* Ubuntu (18.04, 19.04)
+* Ubuntu (16.04, 18.04, 19.04)
 
 ### _**General Notes:**_  
 * _When following the steps below please use a standard permission user unless otherwise specified._
@@ -30,6 +30,16 @@ bash build_tensorflow.sh    [Provide -t option for executing build with tests]
 If the build completes successfully, go to STEP 2. In case of error, check `logs` for more details or go to STEP 1.2 to follow manual build steps.
  
 #### 1.2) Install the dependencies
+
+  * Ubuntu 16.04
+ ```shell
+  sudo apt-get update  
+  sudo apt-get install -y pkg-config zip g++ zlib1g-dev unzip git vim tar wget automake autoconf libtool make curl maven openjdk-11-jdk python3-pip python3-virtualenv python3-numpy swig python3-dev libcurl3-dev python3-mock python3-scipy bzip2 python3-sklearn libhdf5-dev patch git patch libssl-dev
+  sudo pip3 install future wheel backports.weakref portpicker futures enum34 keras_preprocessing keras_applications h5py tensorflow_estimator
+  
+  #Create symlink python from python3
+  sudo ln -s /usr/bin/python3 /usr/bin/python
+ ```
 
   * Ubuntu (18.04, 19.04)
  ```shell
@@ -187,7 +197,7 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
      
   * Build    
   ```shell
-  bazel --host_jvm_args="-Xms5120m" --host_jvm_args="-Xmx5120m" build  --define=tensorflow_mkldnn_contraction_kernel=0 --config=opt //tensorflow/tools/pip_package:build_pip_package
+  bazel --host_jvm_args="-Xms5120m" --host_jvm_args="-Xmx5120m" build  --define=tensorflow_mkldnn_contraction_kernel=0 //tensorflow/tools/pip_package:build_pip_package
   ``` 
 
 #### 1.5)  Build and install TensorFlow wheel
@@ -219,21 +229,20 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
 * Run complete testsuite  
 
   ```shell
-  bazel --host_jvm_args="-Xms1024m" --host_jvm_args="-Xmx2048m" test --action_env=TF2_BEHAVIOR=1 --define=tensorflow_mkldnn_contraction_kernel=0 --host_javabase="@local_jdk//:jdk" --test_tag_filters=-gpu,-benchmark-test,-v1only -k   --test_timeout 300,450,1200,3600 --build_tests_only --test_output=errors -- //tensorflow/... -//tensorflow/compiler/... -//tensorflow/lite/... -//tensorflow/core/platform/cloud/... -//tensorflow/java/... -//tensorflow/contrib/... &
+  bazel --host_jvm_args="-Xms1024m" --host_jvm_args="-Xmx2048m" test --define=tensorflow_mkldnn_contraction_kernel=0 --host_javabase="@local_jdk//:jdk" --test_tag_filters=-gpu,-benchmark-test,-v1only -k   --test_timeout 300,450,1200,3600 --build_tests_only --test_output=errors -- //tensorflow/... -//tensorflow/compiler/... -//tensorflow/lite/... -//tensorflow/core/platform/cloud/... -//tensorflow/java/... -//tensorflow/contrib/... 
   ```
   _**Note:**_ Skipping some test modules due to an issue related to boringssl : `#error Unknown target CPU` [#14039](https://github.com/tensorflow/tensorflow/issues/14039) as well as an issue related to java : `Building Java resource jar failed `[#19770](https://github.com/tensorflow/tensorflow/issues/19770).
   
-  _**Note:**_ Skipping //tensorflow/contrib module as tests under ./contrib folder are considered dead and will be removed from next release
+  _**Note:**_ Skipping //tensorflow/contrib module as tf.contrib has been deprecated from v2.x onwards
   
-  _**Note:**_ TBD Skipping note for other modules
   
 * Run individual test 
   ```shell
-  bazel --host_jvm_args="-Xms1024m" --host_jvm_args="-Xmx2048m" test --action_env=TF2_BEHAVIOR=1 --define=tensorflow_mkldnn_contraction_kernel=0 --host_javabase="@local_jdk//:jdk" //tensorflow/<module_name>:<testcase_name>
+  bazel --host_jvm_args="-Xms1024m" --host_jvm_args="-Xmx2048m" test --define=tensorflow_mkldnn_contraction_kernel=0 --host_javabase="@local_jdk//:jdk" //tensorflow/<module_name>:<testcase_name>
   ```  
     For example,   
     ```shell
-    bazel --host_jvm_args="-Xms1024m" --host_jvm_args="-Xmx2048m" test --action_env=TF2_BEHAVIOR=1 --define=tensorflow_mkldnn_contraction_kernel=0 --host_javabase="@local_jdk//:jdk" //tensorflow/python/kernel_tests:topk_op_test
+    bazel --host_jvm_args="-Xms1024m" --host_jvm_args="-Xmx2048m" test --define=tensorflow_mkldnn_contraction_kernel=0 --host_javabase="@local_jdk//:jdk" //tensorflow/python/kernel_tests:topk_op_test
     ```  
  
   _**Note:**_       
@@ -255,21 +264,18 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
      `//tensorflow/python/tpu:tpu_test`  
      `//tensorflow/python/training/tracking:util_xla_test_cpu`  
      `//tensorflow/python/tpu:datasets_test`  
-
-  _2. `//tensorflow/python/keras:training_generator_test`_ fails for version 2.0.0 however passed on master. So its expected to be resolved in next release.
+	 `//tensorflow/python/kernel_tests/random:random_binomial_test`  
+	 
+  _2. `//tensorflow/python/keras:training_generator_test`_ fails for version 2.0.0 however passes on master. So its expected to be resolved in next release.
 
   _3. `//tensorflow/core:framework_variant_test`_ will be resolved as corresponding PR is merged on master(https://github.com/tensorflow/tensorflow/pull/30285).
   
   _4. Below tests are failing on s390x and investigation is in progress:_     
      `//tensorflow/python/kernel_tests:unicode_decode_op_test`  
      `//tensorflow/python/kernel_tests:unicode_transcode_op_test`  
-     `//tensorflow/core/kernels/data:parallel_map_dataset_op_test`  
-     `//tensorflow/python/kernel_tests:decode_raw_op_test`  
      `//tensorflow/python:cluster_test`  
      `//tensorflow/python:cost_analyzer_test`  
-     `//tensorflow/python/distribute:values_test`  
-     `//tensorflow/python/eager:remote_test`  
-     `//tensorflow/python/kernel_tests/random:random_binomial_test`  
+  
 
 ## References:
    https://www.tensorflow.org/  
