@@ -205,7 +205,7 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   ```shell  
   cd /<source_root>/tensorflow
   bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_wheel
-  sudo pip install /tmp/tensorflow_wheel/tensorflow-2.0.0-cp37-cp37m-linux_s390x.whl
+  sudo pip3 install /tmp/tensorflow_wheel/tensorflow-2.0.0-cp37-cp37m-linux_s390x.whl
   ```  
 
 ## Step 2: Verify TensorFlow (Optional)  
@@ -215,7 +215,6 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
    $ cd /<source_root>/
    $ python
     >>> import tensorflow as tf
-    >>> tf.enable_eager_execution()
     >>> tf.add(1, 2).numpy()
     3
     >>> hello = tf.constant('Hello, TensorFlow!')
