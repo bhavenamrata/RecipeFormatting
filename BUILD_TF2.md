@@ -35,20 +35,27 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
  ```shell
   sudo apt-get update  
   sudo apt-get install -y pkg-config zip g++ zlib1g-dev unzip git vim tar wget automake autoconf libtool make curl maven openjdk-11-jdk python3-pip python3-virtualenv python3-numpy swig python3-dev libcurl3-dev python3-mock python3-scipy bzip2 python3-sklearn libhdf5-dev patch git patch libssl-dev
-  sudo pip3 install future wheel backports.weakref portpicker futures enum34 keras_preprocessing keras_applications h5py tensorflow_estimator
+  sudo pip3 install numpy==1.16.2 future wheel backports.weakref portpicker futures==2.2.0 enum34 keras_preprocessing keras_applications h5py tensorflow_estimator
+  
   
   #Create symlink python from python3
-  sudo ln -s /usr/bin/python3 /usr/bin/python
+  sudo ln -sf /usr/bin/python3 /usr/bin/python
  ```
-
+	
+  * For Ubuntu 16.04 download and install AdoptOpenJDK (OpenJDK11 with HotSpot) from [here](https://adoptopenjdk.net/releases.html?variant=openjdk11&jvmVariant=hotspot#s390x_linux)  
+ ```shell
+  export JAVA_HOME=/<path to JDK>/
+  export PATH=$JAVA_HOME/bin:$PATH
+ ```
+ 
   * Ubuntu (18.04, 19.04)
  ```shell
   sudo apt-get update  
   sudo apt-get install -y pkg-config zip g++ zlib1g-dev unzip git vim tar wget automake autoconf libtool make curl maven openjdk-11-jdk python3-pip python3-virtualenv python3-numpy swig python3-dev libcurl3-dev python3-mock python3-scipy bzip2 python3-sklearn libhdf5-dev patch git patch libssl-dev
-  sudo pip3 install future wheel backports.weakref portpicker futures enum34 keras_preprocessing keras_applications h5py tensorflow_estimator
+  sudo pip3 install numpy==1.16.2 future wheel backports.weakref portpicker futures enum34 keras_preprocessing keras_applications h5py tensorflow_estimator
   
   #Create symlink python from python3
-  sudo ln -s /usr/bin/python3 /usr/bin/python
+  sudo ln -sf /usr/bin/python3 /usr/bin/python
  ```
  
  
@@ -57,6 +64,14 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   export GRPC_PYTHON_BUILD_SYSTEM_OPENSSL=True
   sudo -E pip3 install grpcio  
  ```  
+  
+  * Install go   
+ ```shell  
+  wget https://dl.google.com/go/go1.13.3.linux-s390x.tar.gz
+  tar -C /usr/local -xzf go1.13.3.linux-s390x.tar.gz|
+  export PATH=/usr/local/go/bin:$PATH
+  go version  
+ ```    
   
 #### 1.3)  Build Bazel
 
