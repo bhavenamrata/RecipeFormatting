@@ -28,6 +28,11 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
  
 #### 1.2) Install the dependencies
 
+ ```shell  
+ export SOURCE_ROOT=/<source_root>/
+ ```  
+ 
+
   * Ubuntu 16.04
  ```shell
   sudo apt-get update  
@@ -36,7 +41,7 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   
  ```
 	
-  * For Ubuntu 16.04 download and install AdoptOpenJDK (OpenJDK 11 with HotSpot) from [here](https://adoptopenjdk.net/releases.html?variant=openjdk11&jvmVariant=hotspot#s390x_linux)  
+  * (For Ubuntu 16.04) Download and install AdoptOpenJDK (OpenJDK 11 with HotSpot) from [here](https://adoptopenjdk.net/releases.html?variant=openjdk11&jvmVariant=hotspot#s390x_linux)  
  ```shell
   export JAVA_HOME=/<path to JDK>/
   export PATH=$JAVA_HOME/bin:$PATH
@@ -59,7 +64,7 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   
   * Install go   
  ```shell  
-  cd /<source_root>/   
+  cd $SOURCE_ROOT   
   wget https://dl.google.com/go/go1.13.3.linux-s390x.tar.gz  
   tar -C /usr/local -xzf go1.13.3.linux-s390x.tar.gz  
   export PATH=/usr/local/go/bin:$PATH  
@@ -70,7 +75,7 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
 
 * Download Bazel  
   ```shell  
-   cd /<source_root>/  
+   cd $SOURCE_ROOT   
    mkdir bazel && cd bazel  
    wget https://github.com/bazelbuild/bazel/releases/download/0.26.1/bazel-0.26.1-dist.zip
    unzip bazel-0.26.1-dist.zip 
@@ -82,12 +87,12 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   ```shell  
 
   env EXTRA_BAZEL_ARGS="--host_javabase=@local_jdk//:jdk" bash ./compile.sh
-  export PATH=$PATH:/<source_root>/bazel/output/  
+  export PATH=$PATH:$SOURCE_ROOT/bazel/output/  
   ```  
   
   _**Note:** While building Bazel, if build fails with an error `java.lang.OutOfMemoryError: Java heap space`, apply below patch and rebuild Bazel._  
   
-  * Create a patch file `/<source_root>/bazel/scripts/bootstrap/patch_compile.diff` with the following contents:
+  * Create a patch file `$SOURCE_ROOT/bazel/scripts/bootstrap/patch_compile.diff` with the following contents:
   
      ```diff  
      @@ -127,7 +127,7 @@ function java_compilation() {
@@ -104,22 +109,22 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
 
   * Apply the patch file  
      ```shell  
-     cd /<source_root>/bazel/scripts/bootstrap/
+     cd $SOURCE_ROOT/bazel/scripts/bootstrap/
      patch compile.sh < patch_compile.diff 
      ```  
 
   * Rebuild 
      ```shell  
-     cd /<source_root>/bazel/
+     cd $SOURCE_ROOT/bazel/
      env EXTRA_BAZEL_ARGS="--host_javabase=@local_jdk//:jdk" bash ./compile.sh
-     export PATH=$PATH:/<source_root>/bazel/output/
+     export PATH=$PATH:$SOURCE_ROOT/bazel/output/
      ```   
 
 #### 1.4)  Build TensorFlow
 
 * Download source code
   ```shell
-  cd /<source_root>/
+  cd $SOURCE_ROOT
   git clone https://github.com/linux-on-ibm-z/tensorflow
   cd tensorflow
   git checkout v2.0.0-s390x
@@ -131,60 +136,67 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   ./configure  
   Extracting Bazel installation...
   You have bazel 0.26.1- (@non-git) installed.
-  Please specify the location of python. [Default is /usr/bin/python]: /usr/bin/python3
+  Please specify the location of python. [Default is /usr/bin/python]: */usr/bin/python3*
 
   Found possible Python library paths:
     /usr/lib/python3/dist-packages
     /usr/local/lib/python3.7/dist-packages
   Please input the desired Python library path to use.  Default is [/usr/lib/python3/dist-packages]
   
+  Do you wish to build TensorFlow with XLA JIT support? [Y/n]: **N**
+  No XLA JIT support will be enabled for TensorFlow.
+
   Do you wish to build TensorFlow with OpenCL SYCL support? [y/N]: N
   No OpenCL SYCL support will be enabled for TensorFlow.
-  
+
   Do you wish to build TensorFlow with ROCm support? [y/N]: N
   No ROCm support will be enabled for TensorFlow.
-  
+
+  Do you wish to build TensorFlow with CUDA support? [y/N]: N
+  No CUDA support will be enabled for TensorFlow.
+
   Do you wish to download a fresh release of clang? (Experimental) [y/N]: N
   Clang will not be downloaded.
-  
+
   Do you wish to build TensorFlow with MPI support? [y/N]: N
   No MPI support will be enabled for TensorFlow.
-  
+
   Please specify optimization flags to use during compilation when bazel option "--config=opt" is specified [Default is -march=native -Wno-sign-compare]:
-  
-  
+
+
   Would you like to interactively configure ./WORKSPACE for Android builds? [y/N]: N
   Not configuring the WORKSPACE for Android builds.
-  
+
   Preconfigured Bazel build configs. You can use any of the below by adding "--config=<>" to your build command. See .bazelrc for more details.
-          --config=mkl            # Build with MKL support.
-          --config=monolithic     # Config for mostly static monolithic build.
-          --config=gdr            # Build with GDR support.
-          --config=verbs          # Build with libverbs support.
-          --config=ngraph         # Build with Intel nGraph support.
-          --config=numa           # Build with NUMA support.
-          --config=dynamic_kernels        # (Experimental) Build kernels into separate shared objects.
-          --config=v2             # Build TensorFlow 2.x instead of 1.x.
+        --config=mkl            # Build with MKL support.
+        --config=monolithic     # Config for mostly static monolithic build.
+        --config=gdr            # Build with GDR support.
+        --config=verbs          # Build with libverbs support.
+        --config=ngraph         # Build with Intel nGraph support.
+        --config=numa           # Build with NUMA support.
+        --config=dynamic_kernels        # (Experimental) Build kernels into separate shared objects.
+        --config=v2             # Build TensorFlow 2.x instead of 1.x.
   Preconfigured Bazel build configs to DISABLE default on features:
-          --config=noaws          # Disable AWS S3 filesystem support.
-          --config=nogcp          # Disable GCP support.
-          --config=nohdfs         # Disable HDFS support.
-          --config=noignite       # Disable Apache Ignite support.
-          --config=nokafka        # Disable Apache Kafka support.
-          --config=nonccl         # Disable NVIDIA NCCL support.
+        --config=noaws          # Disable AWS S3 filesystem support.
+        --config=nogcp          # Disable GCP support.
+        --config=nohdfs         # Disable HDFS support.
+        --config=noignite       # Disable Apache Ignite support.
+        --config=nokafka        # Disable Apache Kafka support.
+        --config=nonccl         # Disable NVIDIA NCCL support.
   Configuration finished
+
   ```  
 
 * Build Tensorflow
 
   ```shell
-  bazel --host_jvm_args="-Xms5120m" --host_jvm_args="-Xmx5120m" build  --define=tensorflow_mkldnn_contraction_kernel=0 //tensorflow/tools/pip_package:build_pip_package
+  bazel --host_jvm_args="-Xms1024m" --host_jvm_args="-Xmx2048m" build  --define=tensorflow_mkldnn_contraction_kernel=0 //tensorflow/tools/pip_package:build_pip_package
   ``` 
 
 #### 1.5)  Build and install TensorFlow wheel
 
   ```shell  
-  cd /<source_root>/tensorflow
+  cd $SOURCE_ROOT/tensorflow
   bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_wheel
   sudo pip3 install /tmp/tensorflow_wheel/tensorflow-2.0.0-cp*-linux_s390x.whl
   ```  
@@ -193,7 +205,7 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
 * Run TensorFlow from command Line   
 
   ```shell
-   $ cd /<source_root>/
+   $ cd $SOURCE_ROOT
    $ python3
     >>> import tensorflow as tf
     >>> tf.add(1, 2).numpy()
@@ -211,10 +223,10 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   ```shell
   bazel --host_jvm_args="-Xms1024m" --host_jvm_args="-Xmx2048m" test --define=tensorflow_mkldnn_contraction_kernel=0 --host_javabase="@local_jdk//:jdk" --test_tag_filters=-gpu,-benchmark-test,-v1only -k   --test_timeout 300,450,1200,3600 --build_tests_only --test_output=errors -- //tensorflow/... -//tensorflow/compiler/... -//tensorflow/lite/... -//tensorflow/core/platform/cloud/... -//tensorflow/java/... -//tensorflow/contrib/... 
   ```
-  _**Note:** Skipping some test modules due to below issues        
-  1. `//tensorflow/lite` and `//tensorflow/core/platform/cloud` due to boringssl : `#error Unknown target CPU` [#14039](https://github.com/tensorflow/tensorflow/issues/14039) 
-  2. `//tensorflow/java` due to error `Building Java resource jar failed `[#19770](https://github.com/tensorflow/tensorflow/issues/19770) 
-  3. `//tensorflow/contrib` skipped as tf.contrib has been deprecated from v2.x onwards_      
+  _**Note:** Skipping some test modules due to below issues:          
+   *  `//tensorflow/lite` and `//tensorflow/core/platform/cloud` due to BoringSSL : `#error Unknown target CPU`, for more details refer [#14039](https://github.com/tensorflow/tensorflow/issues/14039) 
+   *  `//tensorflow/java` due to error `Building Java resource jar failed ` for more details refer [#19770](https://github.com/tensorflow/tensorflow/issues/19770) 
+   *  `//tensorflow/contrib` skipped as tf.contrib has been deprecated from v2.x onwards_      
   
   
 * Run individual test 
@@ -228,10 +240,8 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
  
   _**Note:**_       
   _1. Below tests are failing on s390x and those are either known or equivalent to Intel:_  
-     `//tensorflow/core:lib_io_snappy_snappy_buffers_test`  
      `//tensorflow/core/grappler/costs:graph_properties_test`  
      `//tensorflow/python:file_io_test`  
-     `//tensorflow/python:framework_meta_graph_test`  
      `//tensorflow/python:session_clusterspec_prop_test`  
      `//tensorflow/python/autograph/pyct:inspect_utils_test_par`  
      `//tensorflow/python/compiler/xla:xla_test`  
