@@ -136,14 +136,14 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   ./configure  
   Extracting Bazel installation...
   You have bazel 0.26.1- (@non-git) installed.
-  Please specify the location of python. [Default is /usr/bin/python]: */usr/bin/python3*
+  Please specify the location of python. [Default is /usr/bin/python]: /usr/bin/python3
 
   Found possible Python library paths:
     /usr/lib/python3/dist-packages
     /usr/local/lib/python3.7/dist-packages
   Please input the desired Python library path to use.  Default is [/usr/lib/python3/dist-packages]
   
-  Do you wish to build TensorFlow with XLA JIT support? [Y/n]: **N**
+  Do you wish to build TensorFlow with XLA JIT support? [Y/n]: N
   No XLA JIT support will be enabled for TensorFlow.
 
   Do you wish to build TensorFlow with OpenCL SYCL support? [y/N]: N
