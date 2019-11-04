@@ -34,9 +34,6 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   sudo apt-get install -y pkg-config zip g++ zlib1g-dev unzip git vim tar wget automake autoconf libtool make curl maven openjdk-11-jdk python3-pip python3-virtualenv python3-numpy swig python3-dev libcurl3-dev python3-mock python3-scipy bzip2 python3-sklearn libhdf5-dev patch git patch libssl-dev
   sudo pip3 install numpy==1.16.2 future wheel backports.weakref portpicker futures==2.2.0 enum34 keras_preprocessing keras_applications h5py tensorflow_estimator
   
-  
-  #Create symlink python from python3
-  sudo ln -sf /usr/bin/python3 /usr/bin/python
  ```
 	
   * For Ubuntu 16.04 download and install AdoptOpenJDK (OpenJDK 11 with HotSpot) from [here](https://adoptopenjdk.net/releases.html?variant=openjdk11&jvmVariant=hotspot#s390x_linux)  
@@ -51,8 +48,6 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   sudo apt-get install -y pkg-config zip g++ zlib1g-dev unzip git vim tar wget automake autoconf libtool make curl maven openjdk-11-jdk python3-pip python3-virtualenv python3-numpy swig python3-dev libcurl3-dev python3-mock python3-scipy bzip2 python3-sklearn libhdf5-dev patch git patch libssl-dev
   sudo pip3 install numpy==1.16.2 future wheel backports.weakref portpicker futures enum34 keras_preprocessing keras_applications h5py tensorflow_estimator
   
-  #Create symlink python from python3
-  sudo ln -sf /usr/bin/python3 /usr/bin/python
  ```
  
  
@@ -136,7 +131,7 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   ./configure  
   Extracting Bazel installation...
   You have bazel 0.26.1- (@non-git) installed.
-  Please specify the location of python. [Default is /usr/bin/python]:
+  Please specify the location of python. [Default is /usr/bin/python]: /usr/bin/python3
 
   Found possible Python library paths:
     /usr/lib/python3/dist-packages
@@ -216,10 +211,10 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   ```shell
   bazel --host_jvm_args="-Xms1024m" --host_jvm_args="-Xmx2048m" test --define=tensorflow_mkldnn_contraction_kernel=0 --host_javabase="@local_jdk//:jdk" --test_tag_filters=-gpu,-benchmark-test,-v1only -k   --test_timeout 300,450,1200,3600 --build_tests_only --test_output=errors -- //tensorflow/... -//tensorflow/compiler/... -//tensorflow/lite/... -//tensorflow/core/platform/cloud/... -//tensorflow/java/... -//tensorflow/contrib/... 
   ```
-  _**Note:**_ Skipping some test modules due to below issues 
-  _1. `//tensorflow/lite` and `//tensorflow/core/platform/cloud` due to boringssl : `#error Unknown target CPU` [#14039](https://github.com/tensorflow/tensorflow/issues/14039)   
-  _2. `//tensorflow/java` due to error `Building Java resource jar failed `[#19770](https://github.com/tensorflow/tensorflow/issues/19770)  
-  _3. `//tensorflow/contrib` skipped as tf.contrib has been deprecated from v2.x onwards  
+  _**Note:** Skipping some test modules due to below issues        
+  1. `//tensorflow/lite` and `//tensorflow/core/platform/cloud` due to boringssl : `#error Unknown target CPU` [#14039](https://github.com/tensorflow/tensorflow/issues/14039) 
+  2. `//tensorflow/java` due to error `Building Java resource jar failed `[#19770](https://github.com/tensorflow/tensorflow/issues/19770) 
+  3. `//tensorflow/contrib` skipped as tf.contrib has been deprecated from v2.x onwards_      
   
   
 * Run individual test 
