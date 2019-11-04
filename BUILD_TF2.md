@@ -41,11 +41,11 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   
  ```
 	
-  * (For Ubuntu 16.04) Download and install AdoptOpenJDK (OpenJDK 11 with HotSpot) from [here](https://adoptopenjdk.net/releases.html?variant=openjdk11&jvmVariant=hotspot#s390x_linux)  
- ```shell
-  export JAVA_HOME=/<path to JDK>/
-  export PATH=$JAVA_HOME/bin:$PATH
- ```
+  * (For Ubuntu 16.04) Download and install AdoptOpenJDK (OpenJDK 11 with HotSpot) from [here](https://adoptopenjdk.net/releases.html?variant=openjdk11&jvmVariant=hotspot#s390x_linux)   
+    ```shell
+      export JAVA_HOME=/<path to JDK>/
+      export PATH=$JAVA_HOME/bin:$PATH
+    ```
  
   * Ubuntu (18.04, 19.04)
  ```shell
