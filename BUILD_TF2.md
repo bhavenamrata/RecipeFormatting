@@ -66,7 +66,7 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
  ```shell  
   cd $SOURCE_ROOT   
   wget https://dl.google.com/go/go1.13.3.linux-s390x.tar.gz  
-  tar -C /usr/local -xzf go1.13.3.linux-s390x.tar.gz  
+  sudo tar -C /usr/local -xzf go1.13.3.linux-s390x.tar.gz  
   export PATH=/usr/local/go/bin:$PATH  
   go version   
  ```    
