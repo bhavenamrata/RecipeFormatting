@@ -10,7 +10,6 @@ The instructions provided below specify the steps to build Tensorflow version 2.
 
 
 ## Step 1: Building and Installing TensorFlow v2.0.0
-**TBD start ======================================**
 
 #### 1.1) Build using script
 
@@ -19,13 +18,11 @@ If you want to build Tensorflow using manual steps, go to STEP 1.2.
 Use the following commands to build Tensorflow using the build [script](https://github.com/linux-on-ibm-z/scripts/tree/master/Tensorflow). Please make sure you have wget installed.
 
 ```
-wget -q https://raw.githubusercontent.com/linux-on-ibm-z/scripts/master/Tensorflow/1.12.0/build_tensorflow.sh
+wget -q https://raw.githubusercontent.com/linux-on-ibm-z/scripts/master/Tensorflow/2.0.0/build_tensorflow.sh
 
 # Build Tensorflow
 bash build_tensorflow.sh    [Provide -t option for executing build with tests]
 ```
-
-**TBD end ======================================**
 
 If the build completes successfully, go to STEP 2. In case of error, check `logs` for more details or go to STEP 1.2 to follow manual build steps.
  
@@ -42,7 +39,7 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   sudo ln -sf /usr/bin/python3 /usr/bin/python
  ```
 	
-  * For Ubuntu 16.04 download and install AdoptOpenJDK (OpenJDK11 with HotSpot) from [here](https://adoptopenjdk.net/releases.html?variant=openjdk11&jvmVariant=hotspot#s390x_linux)  
+  * For Ubuntu 16.04 download and install AdoptOpenJDK (OpenJDK 11 with HotSpot) from [here](https://adoptopenjdk.net/releases.html?variant=openjdk11&jvmVariant=hotspot#s390x_linux)  
  ```shell
   export JAVA_HOME=/<path to JDK>/
   export PATH=$JAVA_HOME/bin:$PATH
@@ -67,6 +64,7 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   
   * Install go   
  ```shell  
+  cd /<source_root>/   
   wget https://dl.google.com/go/go1.13.3.linux-s390x.tar.gz
   tar -C /usr/local -xzf go1.13.3.linux-s390x.tar.gz|
   export PATH=/usr/local/go/bin:$PATH
@@ -127,9 +125,9 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
 * Download source code
   ```shell
   cd /<source_root>/
-  git clone https://github.com/tensorflow/tensorflow.git
+  git clone https://github.com/linux-on-ibm-z/tensorflow
   cd tensorflow
-  git checkout v2.0.0
+  git checkout v2.0.0-s390x
   ```  
 
 * Configure    
@@ -183,34 +181,7 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   ```  
 
 * Build Tensorflow
-  * Create a patch file `/<source_root>/tensorflow/core/platform/default/patch_build_config_bzl.diff` with the following contents:
-    
-  ```diff
-  @@ -693,7 +693,6 @@ def tf_additional_cloud_op_deps():
-       return select({
-           "//tensorflow:android": [],
-           "//tensorflow:ios": [],
-  -        "//tensorflow:linux_s390x": [],
-           "//tensorflow:windows": [],
-           "//tensorflow:api_version_2": [],
-           "//tensorflow:windows_and_api_version_2": [],
-  @@ -709,7 +708,6 @@ def tf_additional_cloud_kernel_deps():
-       return select({
-           "//tensorflow:android": [],
-           "//tensorflow:ios": [],
-  -        "//tensorflow:linux_s390x": [],
-           "//tensorflow:windows": [],
-           "//tensorflow:api_version_2": [],
-           "//tensorflow:windows_and_api_version_2": [],
-    ``` 
 
-  * Apply the patch file  
-     ```shell  
-     cd /<source_root>/tensorflow/core/platform/default/
-     patch build_config.bzl < patch_build_config_bzl.diff
-     ``` 
-     
-  * Build    
   ```shell
   bazel --host_jvm_args="-Xms5120m" --host_jvm_args="-Xmx5120m" build  --define=tensorflow_mkldnn_contraction_kernel=0 //tensorflow/tools/pip_package:build_pip_package
   ``` 
@@ -220,7 +191,7 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   ```shell  
   cd /<source_root>/tensorflow
   bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_wheel
-  sudo pip3 install /tmp/tensorflow_wheel/tensorflow-2.0.0-cp37-cp37m-linux_s390x.whl
+  sudo pip3 install /tmp/tensorflow_wheel/tensorflow-2.0.0-cp*-linux_s390x.whl
   ```  
 
 ## Step 2: Verify TensorFlow (Optional)  
@@ -228,7 +199,7 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
 
   ```shell
    $ cd /<source_root>/
-   $ python
+   $ python3
     >>> import tensorflow as tf
     >>> tf.add(1, 2).numpy()
     3
@@ -245,9 +216,10 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   ```shell
   bazel --host_jvm_args="-Xms1024m" --host_jvm_args="-Xmx2048m" test --define=tensorflow_mkldnn_contraction_kernel=0 --host_javabase="@local_jdk//:jdk" --test_tag_filters=-gpu,-benchmark-test,-v1only -k   --test_timeout 300,450,1200,3600 --build_tests_only --test_output=errors -- //tensorflow/... -//tensorflow/compiler/... -//tensorflow/lite/... -//tensorflow/core/platform/cloud/... -//tensorflow/java/... -//tensorflow/contrib/... 
   ```
-  _**Note:**_ Skipping some test modules due to an issue related to boringssl : `#error Unknown target CPU` [#14039](https://github.com/tensorflow/tensorflow/issues/14039) as well as an issue related to java : `Building Java resource jar failed `[#19770](https://github.com/tensorflow/tensorflow/issues/19770).
-  
-  _**Note:**_ Skipping //tensorflow/contrib module as tf.contrib has been deprecated from v2.x onwards
+  _**Note:**_ Skipping some test modules due to below issues 
+  _1. `//tensorflow/lite` and `//tensorflow/core/platform/cloud` due to boringssl : `#error Unknown target CPU` [#14039](https://github.com/tensorflow/tensorflow/issues/14039)   
+  _2. `//tensorflow/java` due to error `Building Java resource jar failed `[#19770](https://github.com/tensorflow/tensorflow/issues/19770)  
+  _3. `//tensorflow/contrib` skipped as tf.contrib has been deprecated from v2.x onwards  
   
   
 * Run individual test 
@@ -282,9 +254,7 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
 	 
   _2. `//tensorflow/python/keras:training_generator_test`_ fails for version 2.0.0 however passes on master. So its expected to be resolved in next release.
 
-  _3. `//tensorflow/core:framework_variant_test`_ will be resolved as corresponding PR is merged on master(https://github.com/tensorflow/tensorflow/pull/30285).
-  
-  _4. Below tests are failing on s390x and investigation is in progress:_     
+  _3. Below tests are failing on s390x and investigation is in progress:_     
      `//tensorflow/python/kernel_tests:unicode_decode_op_test`  
      `//tensorflow/python/kernel_tests:unicode_transcode_op_test`  
      `//tensorflow/python:cluster_test`  
