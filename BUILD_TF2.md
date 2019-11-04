@@ -235,7 +235,6 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   _1. Below tests are failing on s390x and those are either known or equivalent to Intel:_  
      `//tensorflow/core:lib_io_snappy_snappy_buffers_test`  
      `//tensorflow/core/grappler/costs:graph_properties_test`  
-     `//tensorflow/go:test`  
      `//tensorflow/python:file_io_test`  
      `//tensorflow/python:framework_meta_graph_test`  
      `//tensorflow/python:session_clusterspec_prop_test`  
@@ -252,9 +251,7 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
      `//tensorflow/python/tpu:datasets_test`  
 	 `//tensorflow/python/kernel_tests/random:random_binomial_test`  
 	 
-  _2. `//tensorflow/python/keras:training_generator_test`_ fails for version 2.0.0 however passes on master. So its expected to be resolved in next release.
-
-  _3. Below tests are failing on s390x and investigation is in progress:_     
+  _2. Below tests are failing on s390x and investigation is in progress:_     
      `//tensorflow/python/kernel_tests:unicode_decode_op_test`  
      `//tensorflow/python/kernel_tests:unicode_transcode_op_test`  
      `//tensorflow/python:cluster_test`  
