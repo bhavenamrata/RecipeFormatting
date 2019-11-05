@@ -220,7 +220,8 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
 
 * Run complete testsuite  
 
-  ```shell
+  ```shell  
+  cd $SOURCE_ROOT/tensorflow
   bazel --host_jvm_args="-Xms1024m" --host_jvm_args="-Xmx2048m" test --define=tensorflow_mkldnn_contraction_kernel=0 --host_javabase="@local_jdk//:jdk" --test_tag_filters=-gpu,-benchmark-test,-v1only -k   --test_timeout 300,450,1200,3600 --build_tests_only --test_output=errors -- //tensorflow/... -//tensorflow/compiler/... -//tensorflow/lite/... -//tensorflow/core/platform/cloud/... -//tensorflow/java/... -//tensorflow/contrib/... 
   ```
   _**Note:** Skipping some test modules due to below issues:          
