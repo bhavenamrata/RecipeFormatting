@@ -125,7 +125,7 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
 * Download source code
   ```shell
   cd $SOURCE_ROOT
-  git clone https://github.com/linux-on-ibm-z/tensorflow
+  git clone https://github.com/linux-on-ibm-z/tensorflow.git
   cd tensorflow
   git checkout v2.0.0-s390x
   ```  
