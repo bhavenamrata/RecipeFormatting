@@ -55,7 +55,10 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   
  ```
  
-  _**Note:** Ensure `/usr/bin/python` points to Python 3 to build TensorFlow in a Python 3 only environment_
+  * Ensure `/usr/bin/python` points to Python 3 to build TensorFlow in a Python 3 only environment
+ ```shell  
+   sudo ln -s /usr/bin/python3 /usr/bin/python   
+ ```  
   
  
   * Install grpcio   
