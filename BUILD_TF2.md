@@ -95,22 +95,22 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   * Create a patch file `$SOURCE_ROOT/bazel/scripts/bootstrap/patch_compile.diff` with the following contents:
   
      ```diff  
-     @@ -127,7 +127,7 @@ function java_compilation() {
-         # Useful if your system chooses too small of a max heap for javac.
-         # We intentionally rely on shell word splitting to allow multiple
-         # additional arguments to be passed to javac.
-
-     -   run "${JAVAC}" -classpath "${classpath}" -sourcepath "${sourcepath}" \
-     +   run "${JAVAC}" -J-Xms1g -J-Xmx1g -classpath "${classpath}" -sourcepath "${sourcepath}" \
-       -d "${output}/classes" -source "$JAVA_VERSION" -target "$JAVA_VERSION" \
-       -encoding UTF-8 ${BAZEL_JAVAC_OPTS} "@${paramfile}"
-
+	 --- compile.sh.orig     2019-11-01 03:10:36.253437981 -0400
+	 +++ compile.sh  2019-11-01 03:10:59.793427971 -0400
+	 @@ -127,7 +127,7 @@
+	 	# Useful if your system chooses too small of a max heap for javac.
+	 	# We intentionally rely on shell word splitting to allow multiple
+	 	# additional arguments to be passed to javac.
+	 -  run "${JAVAC}" -classpath "${classpath}" -sourcepath "${sourcepath}" \
+	 +  run "${JAVAC}" -J-Xms1g -J-Xmx1g -classpath "${classpath}" -sourcepath "${sourcepath}" \
+	 	 -d "${output}/classes" -source "$JAVA_VERSION" -target "$JAVA_VERSION" \
+	 	 -encoding UTF-8 ${BAZEL_JAVAC_OPTS} "@${paramfile}"
      ``` 
 
   * Apply the patch file  
      ```shell  
      cd $SOURCE_ROOT/bazel/scripts/bootstrap/
-     patch compile.sh < patch_compile.diff 
+     patch --ignore-whitespace compile.sh < patch_compile.diff  
      ```  
 
   * Rebuild 
