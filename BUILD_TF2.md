@@ -46,6 +46,7 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
       export JAVA_HOME=/<path to JDK>/
       export PATH=$JAVA_HOME/bin:$PATH
     ```
+  _**Note:** At the time of creation of these build instructions, TensorFlow was verified with AdoptOpenJDK 11 version (jdk-11.0.5+10)._  
  
   * Ubuntu (18.04, 19.04)
  ```shell
@@ -246,21 +247,25 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
  
   _**Note:**_       
   _1. Below tests are failing on s390x and those are either known or equivalent to Intel:_  
-     `//tensorflow/core/grappler/costs:graph_properties_test`  
-     `//tensorflow/python:file_io_test`  
      `//tensorflow/python:session_clusterspec_prop_test`  
      `//tensorflow/python/autograph/pyct:inspect_utils_test_par`  
      `//tensorflow/python/compiler/xla:xla_test`  
-     `//tensorflow/python/debug:debugger_cli_common_test`  
      `//tensorflow/python/debug:dist_session_debug_grpc_test`  
-     `//tensorflow/python/eager:backprop_test`  
+	 `//tensorflow/python/distribute:values_test`  
      `//tensorflow/python/eager:def_function_xla_test_cpu`  
-     `//tensorflow/python/kernel_tests:reader_ops_test`  
+	 `//tensorflow/python/eager:remote_test`
+	 `//tensorflow/python/kernel_tests:reader_ops_test`  
      `//tensorflow/python/ops/parallel_for:xla_control_flow_ops_test`  
      `//tensorflow/python/tpu:tpu_test`  
      `//tensorflow/python/training/tracking:util_xla_test_cpu`  
      `//tensorflow/python/tpu:datasets_test`  
-	 `//tensorflow/python/kernel_tests/random:random_binomial_test`  
+	 `//tensorflow/python/kernel_tests/random:random_binomial_test` (Passes onn rerun)
+	 `//tensorflow/python/autograph/pyct/static_analysis:activity_py3_test` (Only Ubuntu 16.04)  
+	 `//tensorflow/python/distribute:distribute_lib_test` (Only Ubuntu 16.04)   
+	 `//tensorflow/python/keras/optimizer_v2:optimizer_v2_test` (Only Ubuntu 16.04)   
+	 `//tensorflow/python/keras:base_layer_test` (Only Ubuntu 16.04)   
+	 
+	 
 	 
   _2. Below tests are failing on s390x and investigation is in progress:_     
      `//tensorflow/python/kernel_tests:unicode_decode_op_test`  
