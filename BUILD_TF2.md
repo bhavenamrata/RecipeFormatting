@@ -52,12 +52,12 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   * Ubuntu (18.04, 19.04)
  ```shell
   sudo apt-get update  
-  sudo apt-get install -y pkg-config zip g++ zlib1g-dev unzip git vim tar wget automake autoconf libtool make curl maven openjdk-11-jdk python3-pip python3-virtualenv python3-numpy swig python3-dev libcurl3-dev python3-mock python3-scipy bzip2 python3-sklearn libhdf5-dev patch git patch libssl-dev
+  sudo apt-get install -y pkg-config zip g++ zlib1g-dev unzip git vim tar wget automake autoconf libtool make curl maven openjdk-11-jdk python3-pip python3-virtualenv python3-numpy swig python3-dev libcurl3-dev python3-mock python3-scipy bzip2 python3-sklearn libhdf5-dev patch git libssl-dev
   sudo pip3 install numpy==1.16.2 future wheel backports.weakref portpicker futures enum34 keras_preprocessing keras_applications h5py tensorflow_estimator
   
  ```
  
-  * Ensure `/usr/bin/python` points to Python 3 to build TensorFlow in a Python 3 only environment
+  * Ensure `/usr/bin/python` points to Python 3 to build TensorFlow in a Python 3 only environment using below command  
  ```shell  
    sudo ln -s /usr/bin/python3 /usr/bin/python   
  ```  
@@ -231,10 +231,10 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   cd $SOURCE_ROOT/tensorflow
   bazel --host_jvm_args="-Xms1024m" --host_jvm_args="-Xmx2048m" test --define=tensorflow_mkldnn_contraction_kernel=0 --host_javabase="@local_jdk//:jdk" --test_tag_filters=-gpu,-benchmark-test,-v1only -k   --test_timeout 300,450,1200,3600 --build_tests_only --test_output=errors -- //tensorflow/... -//tensorflow/compiler/... -//tensorflow/lite/... -//tensorflow/core/platform/cloud/... -//tensorflow/java/... -//tensorflow/contrib/... 
   ```
-  _**Note:** Skipping some test modules due to below issues:          
-   *  `//tensorflow/lite` and `//tensorflow/core/platform/cloud` due to BoringSSL : `#error Unknown target CPU`, for more details refer [#14039](https://github.com/tensorflow/tensorflow/issues/14039) 
-   *  `//tensorflow/java` due to error `Building Java resource jar failed ` for more details refer [#19770](https://github.com/tensorflow/tensorflow/issues/19770) 
-   *  `//tensorflow/contrib` skipped as tf.contrib has been deprecated from v2.x onwards_      
+  _**Note:** Skipping some test modules due to below issues:_            
+   *  `//tensorflow/lite` and `//tensorflow/core/platform/cloud` skipped due to BoringSSL, refer [#14039](https://github.com/tensorflow/tensorflow/issues/14039) for details  
+   *  `//tensorflow/java` is under investigation, refer [#19770](https://github.com/tensorflow/tensorflow/issues/19770) for details  
+   *  `//tensorflow/contrib` skipped as tf.contrib has been deprecated from v2.x onwards      
   
   
 * Run individual test 
