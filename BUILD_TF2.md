@@ -254,13 +254,13 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
      `//tensorflow/python/debug:dist_session_debug_grpc_test`  
 	 `//tensorflow/python/distribute:values_test`  
      `//tensorflow/python/eager:def_function_xla_test_cpu`  
-	 `//tensorflow/python/eager:remote_test`
+	 `//tensorflow/python/eager:remote_test`  
 	 `//tensorflow/python/kernel_tests:reader_ops_test`  
      `//tensorflow/python/ops/parallel_for:xla_control_flow_ops_test`  
      `//tensorflow/python/tpu:tpu_test`  
      `//tensorflow/python/training/tracking:util_xla_test_cpu`  
      `//tensorflow/python/tpu:datasets_test`  
-	 `//tensorflow/python/kernel_tests/random:random_binomial_test (Passes on rerun)`
+	 `//tensorflow/python/kernel_tests/random:random_binomial_test (Passes on rerun)`  
 	 `//tensorflow/python/autograph/pyct/static_analysis:activity_py3_test (For Ubuntu 16.04 only)`  
 	 `//tensorflow/python/distribute:distribute_lib_test (For Ubuntu 16.04 only)`   
 	 `//tensorflow/python/keras/optimizer_v2:optimizer_v2_test (For Ubuntu 16.04 only)`   
