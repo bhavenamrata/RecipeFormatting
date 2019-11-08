@@ -213,7 +213,7 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
 
   ```shell
    $ cd $SOURCE_ROOT
-   $ python3
+   $ /usr/bin/python3
     >>> import tensorflow as tf
     >>> tf.add(1, 2).numpy()
     3
@@ -230,7 +230,13 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   ```shell  
   cd $SOURCE_ROOT/tensorflow
   bazel --host_jvm_args="-Xms1024m" --host_jvm_args="-Xmx2048m" test --define=tensorflow_mkldnn_contraction_kernel=0 --host_javabase="@local_jdk//:jdk" --test_tag_filters=-gpu,-benchmark-test,-v1only -k   --test_timeout 300,450,1200,3600 --build_tests_only --test_output=errors -- //tensorflow/... -//tensorflow/compiler/... -//tensorflow/lite/... -//tensorflow/core/platform/cloud/... -//tensorflow/java/... -//tensorflow/contrib/... 
-  ```
+  ```  
+  
+  _**Note:** If tests fail with `'_NamespacePath' object has no attribute 'sort'` error, upgrade setuptools dependency with below command and rerun the test:_    
+  ```shell   
+  sudo pip3 install --upgrade setuptools  
+  ```   
+
   _**Note:** Skipping some test modules due to below issues:_            
    *  `//tensorflow/lite` and `//tensorflow/core/platform/cloud` skipped due to BoringSSL, refer [#14039](https://github.com/tensorflow/tensorflow/issues/14039) for details  
    *  `//tensorflow/java` is under investigation, refer [#19770](https://github.com/tensorflow/tensorflow/issues/19770) for details  
@@ -261,6 +267,7 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
      `//tensorflow/python/training/tracking:util_xla_test_cpu`  
      `//tensorflow/python/tpu:datasets_test`  
 	 `//tensorflow/python/kernel_tests/random:random_binomial_test (Passes on rerun)`  
+	 `//tensorflow/python/eager:backprop_test(for Ubuntu 19.04 only)`   
 	 `//tensorflow/python/autograph/pyct/static_analysis:activity_py3_test (For Ubuntu 16.04 only)`  
 	 `//tensorflow/python/distribute:distribute_lib_test (For Ubuntu 16.04 only)`   
 	 `//tensorflow/python/keras/optimizer_v2:optimizer_v2_test (For Ubuntu 16.04 only)`   
