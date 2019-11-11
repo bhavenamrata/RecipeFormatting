@@ -266,7 +266,7 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
      `//tensorflow/python/tpu:tpu_test`  
      `//tensorflow/python/training/tracking:util_xla_test_cpu`  
      `//tensorflow/python/tpu:datasets_test`  
-	 `//tensorflow/python/kernel_tests/random:random_binomial_test (Passes on rerun)`  
+	 `//tensorflow/python/kernel_tests/random:random_binomial_test`  
 	 `//tensorflow/python/eager:backprop_test (For Ubuntu 19.04 only)`   
 	 `//tensorflow/python/autograph/pyct/static_analysis:activity_py3_test (For Ubuntu 16.04 only)`  
 	 `//tensorflow/python/distribute:distribute_lib_test (For Ubuntu 16.04 only)`   
