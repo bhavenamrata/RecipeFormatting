@@ -1,6 +1,6 @@
 # Building TensorFlow
 
-The instructions provided below specify the steps to build Tensorflow version 2.0.0 on Linux on IBM Z for
+The instructions provided below specify the steps to build TensorFlow version 2.0.0 on Linux on IBM Z for following distributions:
 
 * Ubuntu (16.04, 18.04, 19.04)
 
