@@ -66,7 +66,8 @@ If the build completes successfully, go to STEP 2. In case of error, check `logs
   * Install grpcio   
  ```shell  
   export GRPC_PYTHON_BUILD_SYSTEM_OPENSSL=True
-  sudo -E pip3 install grpcio  
+  sudo -E pip3 install grpcio  # Ubuntu (16.04, 18.04)  
+  sudo -E GRPC_PYTHON_LDFLAGS="" pip3 install grpcio # Ubuntu 19.04  
  ```  
   
   * Install go   
